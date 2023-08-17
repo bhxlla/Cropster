@@ -44,6 +44,17 @@ struct CropsterView: View {
         height: UIScreen.main.bounds.width - PADDING
     )
     
+    @State var offset: CGSize = .init(width: 0.5, height: 0.5)
+    @State var scale: CGFloat = 1
+    
+    @State var radius: CGFloat = .zero
+    
+    
+    var minDimen: CGFloat {
+        let sz = sizeOfRatio
+        return min(sz.width, sz.height)
+    }
+    
     var body: some View {
         VStack {
             imageView
@@ -51,8 +62,77 @@ struct CropsterView: View {
         }
     }
     
+    var buttons: some View {
+        HStack {
+            Button {
+                withAnimation {
+                    offset = .init(width: offset.width, height: 0.5)
+                }
+            } label: {
+                Image(systemName: "align.vertical.center")
+                    .font(.title)
+                    .tint(Color(uiColor: .secondaryLabel))
+            }
+            
+            Button {
+                withAnimation {
+                    offset = .init(width: 0.5, height: offset.height)
+                }
+            } label: {
+                Image(systemName: "align.horizontal.center")
+                    .font(.title)
+                    .tint(Color(uiColor: .secondaryLabel))
+                    .padding(.horizontal)
+            }
+
+            Button {
+                withAnimation {
+                    scale = 1
+                }
+            } label: {
+                Image(systemName: "1.magnifyingglass")
+                    .font(.title)
+                    .tint(Color(uiColor: .secondaryLabel))
+            }
+        }
+        .padding(.vertical)
     }
     
+    var slider: some View {
+        HStack {
+            Button {
+                withAnimation {
+                    radius = 0
+                }
+            } label: {
+                RoundedRectangle(cornerRadius: 0)
+                    .stroke(lineWidth: 2)
+                    .fill(Color(uiColor: .secondaryLabel))
+                    .frame(.same(30).sizeWith(ratio: selectedRatio.ratio))
+            }
+            .frame(.same(30))
+
+            
+            Slider(value: $radius, in: 0...(minDimen/2))
+                .padding(.horizontal)
+            
+            Button {
+                withAnimation {
+                    radius = minDimen/2
+                }
+            } label: {
+                RoundedRectangle(cornerRadius: 15, style: .continuous)
+                    .stroke(lineWidth: 2)
+                    .fill(Color(uiColor: .secondaryLabel))
+                    .frame(.same(30).sizeWith(ratio: selectedRatio.ratio))
+            }
+            .frame(.same(30))
+
+        }
+        .padding()
+        .padding(.horizontal)
+        .frame(maxWidth: 500)
+    }
     
     var imageView: some View {
         let sizeWithAspectRatio = sizeOfRatio
