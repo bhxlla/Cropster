@@ -47,8 +47,13 @@ struct CropsterView: View {
     @State var offset: CGSize = .init(width: 0.5, height: 0.5)
     @State var scale: CGFloat = 1
     
+    @State var selectedRatio: Ratios = .constants(._1x1)
+    
     @State var radius: CGFloat = .zero
     
+    var sizeOfRatio: CGSize {
+        size.sizeWith(ratio: selectedRatio.ratio)
+    }
     
     var minDimen: CGFloat {
         let sz = sizeOfRatio
@@ -57,7 +62,20 @@ struct CropsterView: View {
     
     var body: some View {
         VStack {
+            Spacer()
+            
             imageView
+
+            buttons
+                        
+            slider
+            Spacer()
+            VStack {
+                
+                RatioPickerView(aspect: image.aspect, selected: $selectedRatio)
+                    .padding(.vertical)
+
+            }
 
         }
     }
