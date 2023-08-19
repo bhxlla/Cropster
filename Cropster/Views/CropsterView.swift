@@ -155,6 +155,12 @@ struct CropsterView: View {
     var imageView: some View {
         let sizeWithAspectRatio = sizeOfRatio
         return VStack {
+            CropsterImageView(
+                image: $image,
+                size: .init(get: { sizeWithAspectRatio }, set: { _ in }),
+                offset: $offset,
+                scale: $scale
+            )
         }
         .overlay {
             RoundedRectangle(cornerRadius: radius, style: .continuous)
