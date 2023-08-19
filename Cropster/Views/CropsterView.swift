@@ -156,8 +156,30 @@ struct CropsterView: View {
         let sizeWithAspectRatio = sizeOfRatio
         return VStack {
         }
+        .overlay {
+            RoundedRectangle(cornerRadius: radius, style: .continuous)
+                .stroke(style: .init(
+                    lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 0, dash: [], dashPhase: .zero
+                ))
+                .fill(Color(uiColor: .secondaryLabel))
         }
         .frame(maxWidth: .infinity, maxHeight: UIScreen.main.bounds.width)
+        .overlay(content: {
+            Rectangle()
+                .fill(.ultraThinMaterial)
+                .opacity(4/5)
+                .mask(
+                    Window(
+                        param: SomeVector(value: Params(
+                            width: sizeWithAspectRatio.width,
+                            height: sizeWithAspectRatio.height,
+                            radius: radius
+                        ))
+                    )
+                        .fill(style: FillStyle(eoFill: true))
+                )
+                .allowsHitTesting(false)
+        })
         .clipped()
     }
     
