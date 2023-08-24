@@ -17,6 +17,13 @@ struct CropsterImageView: View {
     var body: some View {
         
         VStack {
+            ZoomPanView.init(
+                image: $image,
+                offset: $offset,
+                scale: $scale) {
+                    offset = $0.toSize
+                    scale = $1
+                }
         }
         .frame(size)
         .background(.gray)
